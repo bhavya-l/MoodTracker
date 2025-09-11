@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moodtracker/core/home_screen.dart';
-import 'dart:async';
-import 'package:sqflite/sqflite.dart';
 import 'package:moodtracker/db/database_helper.dart';
+import 'package:moodtracker/core/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xfff9f6f1)),
-      ),
+      theme: darkTheme,
       home: const HomePage(),
     );
   }
