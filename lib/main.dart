@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:moodtracker/core/home_screen.dart';
 import 'dart:async';
-import 'package:flutter/widgets.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:moodtracker/db/database_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(
-    join(await getDatabasesPath(), 'moodtracker_database.db'),
-  );
+  final db = await DatabaseHelper.instance.database;
   runApp(const MyApp());
 }
 
