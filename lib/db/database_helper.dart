@@ -30,9 +30,21 @@ class DatabaseHelper {
       CREATE TABLE reading (
         id INTEGER PRIMARY KEY,
         timestamp TEXT,
-        mood_score INTEGER
+        mood_score INTEGER,
+        context_light INTEGER,
+        context_noise INTEGER,
+        context_activity INTEGER
       )
     ''');
+  }
+
+  Future<void> deleteDatabaseFile() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(
+      dbPath,
+      'moodtracker_database.db',
+    ); // replace with your db filename
+    await deleteDatabase(path);
   }
 
   Future<int> insertReading(Reading reading) async {

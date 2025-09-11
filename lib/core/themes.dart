@@ -7,7 +7,6 @@ final ThemeData darkTheme = ThemeData(
   cardColor: const Color(0xff262626),
   // AppBar
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xff1A1A1A),
     elevation: 0,
     titleTextStyle: TextStyle(
       color: Colors.white,
