@@ -29,6 +29,7 @@ class _JournalBoxState extends State<JournalBox> {
             maxLines: null,
             expands: true,
             decoration: const InputDecoration(
+              border: InputBorder.none,
               fillColor: const Color(0xff333333),
               hintText: "Write about your day...",
               hintStyle: const TextStyle(
@@ -36,6 +37,12 @@ class _JournalBoxState extends State<JournalBox> {
                 fontStyle: FontStyle.italic,
               ),
               counterText: "",
+              contentPadding: const EdgeInsets.only(
+                left: 12, // padding for hint/start text
+                top: 12,
+                right: 40, // leave room so counter doesn’t overlap
+                bottom: 28,
+              ),
             ),
           ),
           Positioned(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-
   // Backgrounds
   cardColor: const Color(0xff262626),
   // AppBar
