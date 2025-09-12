@@ -34,7 +34,7 @@ class MyHomePageState extends State<HomePage>
     final formattedDate = formatter.format(now);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+        leading: IconButton(icon: const Icon(Icons.settings), onPressed: () {}),
         actions: [
           Row(
             children: [
@@ -59,11 +59,27 @@ class MyHomePageState extends State<HomePage>
       bottomNavigationBar: Material(
         child: TabBar(
           tabs: <Tab>[
-            Tab(text: "Mood"),
-            Tab(text: "Log Mood"),
-            Tab(text: "Insights"),
+            Tab(icon: Icon(Icons.mood), text: "Mood"),
+            Tab(
+              icon: Transform.translate(
+                offset: const Offset(
+                  0,
+                  -16,
+                ), // moves it up (negative y is upward)
+                child: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: const BoxDecoration(
+                    color: Color(0xffFF5847),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.add, color: Colors.white, size: 28),
+                ),
+              ),
+            ),
+            Tab(icon: Icon(Icons.insights), text: "Insights"),
           ],
-
+          labelStyle: const TextStyle(fontSize: 12),
           controller: controller,
         ),
       ),

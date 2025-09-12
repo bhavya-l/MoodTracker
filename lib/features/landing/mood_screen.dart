@@ -11,22 +11,6 @@ class MoodScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with title and date
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Mood",
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 8),
-
-              // Week navigation cards
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -40,7 +24,7 @@ class MoodScreen extends StatelessWidget {
               const SizedBox(height: 8),
 
               Text(
-                "Today's Summary",
+                "Summary",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 22,
@@ -58,7 +42,7 @@ class MoodScreen extends StatelessWidget {
 
               // Today's logs
               Text(
-                "Today's Logs",
+                "Logs",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

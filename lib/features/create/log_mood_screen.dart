@@ -2,22 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:moodtracker/db/database_helper.dart';
 import 'package:moodtracker/models/reading.dart';
 import 'package:intl/intl.dart';
+import 'package:moodtracker/core/text_box.dart';
 
 class LogMoodScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Center(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            // center the children
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () async {
-                  await _createReading();
-                },
-                child: const Text("Log a Mood"),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Choose Mood Entry Method:",
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Row(children: [Text("Text")]),
+                      const SizedBox(height: 16),
+                      JournalBox(),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
