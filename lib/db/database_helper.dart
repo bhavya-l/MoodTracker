@@ -53,8 +53,17 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getReading() async {
-    Database db = await instance.database;
-    return await db.query('reading');
+    final db = await instance.database;
+
+    final today = DateTime.now();
+    final todayString =
+        "${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+
+    return await db.query(
+      'reading',
+      where: "timestamp LIKE ?",
+      whereArgs: ["$todayString%"],
+    );
   }
 
   Future<int> updateReading(Reading reading) async {
