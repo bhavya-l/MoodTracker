@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moodtracker/db/database_helper.dart';
 import 'package:moodtracker/core/ring.dart';
+import 'package:intl/intl.dart';
 
 class MoodScreen extends StatelessWidget {
   @override
@@ -74,9 +75,6 @@ class MoodScreen extends StatelessWidget {
                         final timestamp = DateTime.tryParse(
                           reading['timestamp'],
                         );
-                        final date = timestamp != null
-                            ? "${timestamp.month}/${timestamp.day}"
-                            : "Unknown Date";
                         final time = timestamp != null
                             ? "${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}"
                             : "Unknown Time";
@@ -89,9 +87,15 @@ class MoodScreen extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Text(date),
-                                    const SizedBox(width: 8),
-                                    Text(time),
+                                    Text(
+                                      new DateFormat.jm().format(
+                                        DateTime.parse(reading['timestamp']),
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Color(0xffF2F2F2),
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 16),
