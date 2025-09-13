@@ -9,11 +9,11 @@ class Ring extends StatelessWidget {
     : super(key: key);
 
   Color _getRingColor() {
-    if (value >= 1 && value <= 4) {
+    if (value >= 1 && value < 4) {
       return Color(0xff941C49);
-    } else if (value >= 5 && value <= 7) {
+    } else if (value >= 4 && value < 7) {
       return Color(0xffE6C229);
-    } else if (value >= 8 && value <= 10) {
+    } else if (value >= 7 && value <= 10) {
       return Color(0xff66BC29);
     } else {
       return Colors.grey;
