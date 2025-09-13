@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  // Backgrounds
   cardColor: const Color(0xff262626),
-  // AppBar
   appBarTheme: const AppBarTheme(
     elevation: 0,
     titleTextStyle: TextStyle(
@@ -17,7 +15,6 @@ final ThemeData darkTheme = ThemeData(
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Color(0xff1a1a1a),
   ),
-  // Text
   textTheme: const TextTheme(
     headlineLarge: TextStyle(
       fontSize: 22,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moodtracker/db/database_helper.dart';
+import 'package:moodtracker/core/ring.dart';
 
 class MoodScreen extends StatelessWidget {
   @override
@@ -30,7 +31,6 @@ class MoodScreen extends StatelessWidget {
                   fontSize: 22,
                 ),
               ),
-              // How are you feeling card
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -40,7 +40,6 @@ class MoodScreen extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              // Today's logs
               Text(
                 "Logs",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -51,7 +50,7 @@ class MoodScreen extends StatelessWidget {
 
               Expanded(
                 child: FutureBuilder<List<Map<String, dynamic>>>(
-                  future: _fetchReadings(), // fetch from DB
+                  future: _fetchReadings(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
@@ -98,29 +97,41 @@ class MoodScreen extends StatelessWidget {
                                 const SizedBox(height: 16),
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     _buildLogItem(
                                       "Mood",
-                                      reading['mood_score'].toString(),
+                                      reading['mood_score'],
                                     ),
                                     _buildLogItem(
                                       "Light",
-                                      reading['context_light']?.toString() ??
-                                          "-",
+                                      reading['context_light'] ?? "-",
                                     ),
                                     _buildLogItem(
                                       "Noise",
-                                      reading['context_noise']?.toString() ??
-                                          "-",
+                                      reading['context_noise'] ?? "-",
                                     ),
                                     _buildLogItem(
                                       "Steps",
-                                      reading['context_activity']?.toString() ??
-                                          "-",
+                                      reading['context_activity'] ?? "-",
                                     ),
                                   ],
                                 ),
+
+                                SizedBox(height: 16),
+                                reading['mood_summary'] != null &&
+                                        reading['mood_summary']
+                                            .toString()
+                                            .trim()
+                                            .isNotEmpty
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(reading['mood_summary']),
+                                        ],
+                                      )
+                                    : Text("No Summary Provided."),
                               ],
                             ),
                           ),
@@ -181,25 +192,12 @@ class MoodScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLogItem(String label, String value) {
+  Widget _buildLogItem(String label, int value) {
     return Column(
       children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey[400]!, width: 4),
-          ),
-          child: Center(
-            child: Text(
-              value,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
+        Ring(value: value, size: 60), // No label passed to Ring
         const SizedBox(height: 8),
-        Text(label),
+        Text(label, style: const TextStyle(color: Colors.white, fontSize: 14)),
       ],
     );
   }

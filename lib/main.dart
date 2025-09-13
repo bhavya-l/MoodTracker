@@ -5,6 +5,7 @@ import 'package:moodtracker/core/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  DatabaseHelper.instance.deleteDatabaseFile();
   final db = await DatabaseHelper.instance.database;
   runApp(const MyApp());
 }

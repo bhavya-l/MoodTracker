@@ -3,7 +3,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:moodtracker/models/reading.dart';
 
 class DatabaseHelper {
-  // Singleton instance
   static final DatabaseHelper instance = DatabaseHelper._init();
 
   static Database? _database;
@@ -33,7 +32,8 @@ class DatabaseHelper {
         mood_score INTEGER,
         context_light INTEGER,
         context_noise INTEGER,
-        context_activity INTEGER
+        context_activity INTEGER,
+        mood_summary TEXT
       )
     ''');
   }

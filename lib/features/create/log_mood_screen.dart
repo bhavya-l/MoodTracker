@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:moodtracker/db/database_helper.dart';
 import 'package:moodtracker/models/reading.dart';
-import 'package:intl/intl.dart';
 import 'package:moodtracker/core/text_box.dart';
-import 'package:moodtracker/core/ring.dart';
 
-class LogMoodScreen extends StatelessWidget {
+class LogMoodScreen extends StatefulWidget {
+  @override
+  State<LogMoodScreen> createState() => _LogMoodScreenState();
+}
+
+class _LogMoodScreenState extends State<LogMoodScreen> {
+  String _journalText = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,20 +36,20 @@ class LogMoodScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Ring(
-                            initialValue: 0,
-                            size: 60,
-                            onChanged: (value) {},
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 16),
-                      Card(child: JournalBox()),
+
+                      Card(
+                        child: JournalBox(
+                          onTextChanged: (text) {
+                            setState(() {
+                              _journalText = text;
+                            });
+                          },
+                        ),
+                      ),
                       ElevatedButton(
                         onPressed: () async {
-                          await _createReading();
+                          await _createReading(_journalText);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFff5847),
@@ -71,16 +75,17 @@ class LogMoodScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-Future<int> _createReading() async {
-  final reading = Reading(
-    id: null, // let SQLite auto-generate
-    timestamp: DateTime.now().toIso8601String(), // store as ISO8601 string
-    mood_score: 1,
-    context_light: 2,
-    context_noise: 3,
-    context_activity: 1,
-  );
-  return await DatabaseHelper.instance.insertReading(reading);
+  Future<int> _createReading(String journalText) async {
+    final reading = Reading(
+      id: null,
+      timestamp: DateTime.now().toIso8601String(),
+      mood_score: 1,
+      context_light: 2,
+      context_noise: 3,
+      context_activity: 1,
+      mood_summary: journalText,
+    );
+    return await DatabaseHelper.instance.insertReading(reading);
+  }
 }

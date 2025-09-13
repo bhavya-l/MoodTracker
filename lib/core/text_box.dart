@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class JournalBox extends StatefulWidget {
-  const JournalBox({super.key});
+  final Function(String)? onTextChanged;
+
+  const JournalBox({super.key, this.onTextChanged});
 
   @override
   State<JournalBox> createState() => _JournalBoxState();
@@ -10,6 +12,14 @@ class JournalBox extends StatefulWidget {
 class _JournalBoxState extends State<JournalBox> {
   final TextEditingController _controller = TextEditingController();
   final int _maxLength = 200;
+  @override
+  void initState() {
+    super.initState();
+    // Listen to text changes and call the callback
+    _controller.addListener(() {
+      widget.onTextChanged?.call(_controller.text);
+    });
+  }
 
   @override
   void dispose() {

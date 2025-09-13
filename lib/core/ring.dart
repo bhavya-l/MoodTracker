@@ -1,104 +1,74 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
-class Ring extends StatefulWidget {
-  final int initialValue;
-  final ValueChanged<int>? onChanged;
+class Ring extends StatelessWidget {
+  final int value;
   final double size;
+  final String? label;
 
-  const Ring({
-    Key? key,
-    this.initialValue = 0,
-    this.onChanged,
-    this.size = 120.0,
-  }) : super(key: key);
+  const Ring({Key? key, required this.value, this.size = 120.0, this.label})
+    : super(key: key);
 
-  @override
-  State<Ring> createState() => _RingState();
-}
-
-class _RingState extends State<Ring> {
-  late int _currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentValue = widget.initialValue.clamp(1, 10);
+  Color _getRingColor() {
+    if (value >= 1 && value <= 4) {
+      return Color(0xff941C49);
+    } else if (value >= 5 && value <= 7) {
+      return Color(0xffE6C229);
+    } else if (value >= 8 && value <= 10) {
+      return Color(0xff66BC29);
+    } else {
+      return Colors.grey;
+    }
   }
 
-  void _updateValue(Offset localPosition) {
-    final center = Offset(widget.size / 2, widget.size / 2);
-    final angle = math.atan2(
-      localPosition.dy - center.dy,
-      localPosition.dx - center.dx,
-    );
-
-    double normalizedAngle = (angle + math.pi / 2) % (2 * math.pi);
-    if (normalizedAngle < 0) normalizedAngle += 2 * math.pi;
-
-    double progress = normalizedAngle / (2 * math.pi);
-
-    int newValue = ((progress * 9) + 1).round().clamp(1, 10);
-
-    if (newValue != _currentValue) {
-      setState(() {
-        _currentValue = newValue;
-      });
-      widget.onChanged?.call(_currentValue);
+  Color _getBgRingColor() {
+    if (value >= 1 && value <= 4) {
+      return Color(0xffD28CA1);
+    } else if (value >= 5 && value <= 7) {
+      return Color(0xffF2DE91);
+    } else if (value >= 8 && value <= 10) {
+      return Color(0xffA8C686);
+    } else {
+      return Colors.grey;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double progress = (_currentValue - 1) / 9;
-
-    return GestureDetector(
-      onPanUpdate: (details) {
-        _updateValue(details.localPosition);
-      },
-      onTapDown: (details) {
-        _updateValue(details.localPosition);
-      },
-      child: SizedBox(
-        width: widget.size,
-        height: widget.size,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            SizedBox(
-              width: widget.size,
-              height: widget.size,
-              child: CircularProgressIndicator(
-                strokeCap: StrokeCap.round,
-                value: 1.0,
-                strokeWidth: 8,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.grey[700]!),
-                backgroundColor: Colors.transparent,
-              ),
-            ),
-            SizedBox(
-              width: widget.size,
-              height: widget.size,
-              child: CircularProgressIndicator(
-                value: progress,
-                strokeWidth: 8,
-                valueColor: const AlwaysStoppedAnimation<Color>(
-                  Color(0xFF4CAF50),
+    final clampedValue = value.clamp(0, 10);
+    final progress = clampedValue / 10.0; // Progress from 0 to 1
+    final ringColor = _getRingColor();
+    final bgRingColor = _getBgRingColor();
+    return Column(
+      children: [
+        SizedBox(
+          width: size,
+          height: size,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: size,
+                height: size,
+                child: CircularProgressIndicator(
+                  strokeCap: StrokeCap.round,
+                  value: progress,
+                  strokeWidth: 6,
+                  valueColor: AlwaysStoppedAnimation<Color>(ringColor),
+                  backgroundColor: bgRingColor,
                 ),
-                backgroundColor: Colors.transparent,
               ),
-            ),
-            Text(
-              _currentValue.toString(),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+              Text(
+                clampedValue.toString(),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
