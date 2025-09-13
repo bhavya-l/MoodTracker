@@ -63,6 +63,7 @@ class DatabaseHelper {
       'reading',
       where: "timestamp LIKE ?",
       whereArgs: ["$todayString%"],
+      orderBy: "timestamp DESC",
     );
   }
 
