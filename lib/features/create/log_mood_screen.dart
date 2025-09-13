@@ -167,7 +167,9 @@ class _LogMoodScreenState extends State<LogMoodScreen> {
     final reading = Reading(
       id: null,
       timestamp: DateTime.now().toIso8601String(),
-      mood_score: _userInput.round(),
+      mood_score: _selectedOption == 0
+          ? _userInput.round()
+          : _predictedMoodScore.round(),
       context_light: 2,
       context_noise: 3,
       context_activity: 1,
