@@ -199,7 +199,7 @@ class MoodScreen extends StatelessWidget {
   Widget _buildLogItem(String label, int value) {
     return Column(
       children: [
-        Ring(value: value, size: 60), // No label passed to Ring
+        Ring(value: value, size: 60, label: label),
         const SizedBox(height: 8),
         Text(label, style: const TextStyle(color: Colors.white, fontSize: 14)),
       ],

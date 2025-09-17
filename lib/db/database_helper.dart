@@ -67,6 +67,37 @@ class DatabaseHelper {
     );
   }
 
+  Future<int> getTodaysReadingCount() async {
+    final db = await instance.database;
+    final today = DateTime.now();
+    final todayString =
+        "${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM reading WHERE timestamp LIKE ?',
+      ["$todayString%"],
+    );
+
+    return result.first['count'] as int;
+  }
+
+  Future<Map<String, dynamic>?> getMostRecentReading() async {
+    final db = await instance.database;
+
+    final today = DateTime.now();
+    final todayString =
+        "${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+
+    final result = await db.query(
+      'reading',
+      where: "timestamp LIKE ?",
+      whereArgs: ["$todayString%"],
+      orderBy: "timestamp DESC",
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
   Future<int> updateReading(Reading reading) async {
     Database db = await instance.database;
     return await db.update(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:moodtracker/core/ring.dart';
 import 'package:moodtracker/db/database_helper.dart';
 import 'package:moodtracker/models/reading.dart';
 import 'package:moodtracker/core/text_box.dart';
 import 'package:moodtracker/core/slider.dart';
+import 'package:moodtracker/trackers/light.dart';
 
 class LogMoodScreen extends StatefulWidget {
   @override
@@ -164,13 +164,15 @@ class _LogMoodScreenState extends State<LogMoodScreen> {
   }
 
   Future<int> _createReading(String journalText) async {
+    final lightTracker = LightTracker();
+    final context_light = await lightTracker.getLuxValue();
     final reading = Reading(
       id: null,
       timestamp: DateTime.now().toIso8601String(),
       mood_score: _selectedOption == 0
           ? _userInput.round()
           : _predictedMoodScore.round(),
-      context_light: 2,
+      context_light: context_light,
       context_noise: 3,
       context_activity: 1,
       mood_summary: journalText,
