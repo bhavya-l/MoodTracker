@@ -3,7 +3,23 @@ import 'package:moodtracker/db/database_helper.dart';
 import 'package:moodtracker/core/ring.dart';
 import 'package:intl/intl.dart';
 
-class MoodScreen extends StatelessWidget {
+class MoodScreen extends StatefulWidget {
+  @override
+  _MoodScreenState createState() => _MoodScreenState();
+}
+
+class _MoodScreenState extends State<MoodScreen> {
+  late DateTime today;
+  late String selectedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    today = DateTime.now();
+    selectedDay =
+        "${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,8 +221,8 @@ class MoodScreen extends StatelessWidget {
       ],
     );
   }
-}
 
-Future<List<Map<String, dynamic>>> _fetchReadings() async {
-  return DatabaseHelper.instance.getReading();
+  Future<List<Map<String, dynamic>>> _fetchReadings() async {
+    return DatabaseHelper.instance.getReading(selectedDay);
+  }
 }
