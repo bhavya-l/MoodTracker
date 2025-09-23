@@ -9,15 +9,12 @@ class MoodScreen extends StatefulWidget {
 }
 
 class _MoodScreenState extends State<MoodScreen> {
-  late DateTime today;
-  late String selectedDay;
+  late DateTime selectedDay;
 
   @override
   void initState() {
     super.initState();
-    today = DateTime.now();
-    selectedDay =
-        "${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}";
+    selectedDay = DateTime.now();
   }
 
   @override
@@ -87,14 +84,6 @@ class _MoodScreenState extends State<MoodScreen> {
                       itemCount: readings.length,
                       itemBuilder: (context, index) {
                         final reading = readings[index];
-
-                        final timestamp = DateTime.tryParse(
-                          reading['timestamp'],
-                        );
-                        final time = timestamp != null
-                            ? "${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}"
-                            : "Unknown Time";
-
                         return Card(
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -180,34 +169,58 @@ class _MoodScreenState extends State<MoodScreen> {
       'Sun',
     ];
     List<Widget> cards = [];
-
     for (int i = -2; i <= 2; i++) {
       final date = now.add(Duration(days: i));
       final dayName = dayNames[date.weekday - 1];
       final dayNumber = date.day.toString();
-      final isToday = i == 0;
 
-      cards.add(_buildDayCard(dayName, dayNumber, isSelected: isToday));
+      // Check if this date matches the selected date
+      final isSelected =
+          date.year == selectedDay.year &&
+          date.month == selectedDay.month &&
+          date.day == selectedDay.day;
+
+      cards.add(
+        _buildDayCard(
+          dayName,
+          dayNumber,
+          year: date.year,
+          month: date.month,
+          isSelected: isSelected,
+        ),
+      );
     }
-
     return cards;
   }
 
-  Widget _buildDayCard(String day, String date, {bool isSelected = false}) {
-    return Container(
-      width: 55,
-      height: 75,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: isSelected ? Color(0xff9A8CFF) : Color(0xff404040),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(day),
-          Text(date, style: TextStyle(fontWeight: FontWeight.bold)),
-        ],
+  Widget _buildDayCard(
+    String day,
+    String date, {
+    required int year,
+    required int month,
+    required bool isSelected,
+  }) {
+    return GestureDetector(
+      onTap: () async {
+        selectedDay = DateTime(year, month, int.parse(date));
+        await _fetchReadings();
+        setState(() {});
+      },
+      child: Container(
+        width: 55,
+        height: 75,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: isSelected ? Color(0xff9A8CFF) : Color(0xff404040),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(day),
+            Text(date, style: TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
     );
   }
@@ -223,6 +236,8 @@ class _MoodScreenState extends State<MoodScreen> {
   }
 
   Future<List<Map<String, dynamic>>> _fetchReadings() async {
-    return DatabaseHelper.instance.getReading(selectedDay);
+    String selectedDayString =
+        "${selectedDay.year.toString().padLeft(4, '0')}-${selectedDay.month.toString().padLeft(2, '0')}-${selectedDay.day.toString().padLeft(2, '0')}";
+    return DatabaseHelper.instance.getReading(selectedDayString);
   }
 }
